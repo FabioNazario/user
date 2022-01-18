@@ -2,6 +2,7 @@ package br.edu.infnet.service.Impl;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<User> getAll() {
 		return this.repository.findAll();
+	}
+
+
+	@Override
+	public Optional<User> findByUsername(String username) {
+		return this.repository.findByUsername(username);
 	}
 }

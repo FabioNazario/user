@@ -26,8 +26,8 @@ public class insertUser {
 	public void appReady(ApplicationReadyEvent event) {
 		User user = new User();
 		
-		user.setUsername("fabio");
-		user.setPass(new BCryptPasswordEncoder().encode("123456"));
+		user.setUsername("admin");
+		user.setPass(new BCryptPasswordEncoder().encode("admin"));
 		
 		Perfil perfil = perfilRepository.findById(2L).get();
 		HashSet<Perfil> perfis = new HashSet<Perfil>();

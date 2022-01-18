@@ -3,6 +3,7 @@ package br.edu.infnet.controller;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.infnet.model.User;
@@ -37,7 +40,10 @@ public class UserController {
 	
 	@PostMapping
 	public void create(@RequestBody User u) {
+		
 		logger.info("Criando o user: " + u.getUsername());
+		u.setPass(new BCryptPasswordEncoder().encode(u.getPass()));
+		
 		this.userService.create(u);
 	}
 	
@@ -96,6 +102,23 @@ public class UserController {
 		logger.info("Listando todos os users");
 		return userService.getAll();
 	}
+	
+	@GetMapping("/search")
+	public ResponseEntity<User> getByUsername (@RequestParam(required=true) String username) {
+		
+		logger.info("Procurando usuário com nome: " + username);
+		
+		Optional<User> u = userService.findByUsername(username);
+		
+		if (u.isPresent()){
+			logger.info("Usuario de id:" + u.get().getId() + " encontrado.");
+			return new ResponseEntity<User>(u.get(),HttpStatus.OK);
+		}
+		
+		logger.info("Não foi encontrado nenhum usuário com o nome: " + username);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+    }
 	
 
 public static void copyNonNullProperties(Object src, Object target) {
