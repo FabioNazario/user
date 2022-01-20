@@ -29,7 +29,7 @@ import br.edu.infnet.model.User;
 import br.edu.infnet.service.UserService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/")
 public class UserController {
 	
 	Logger logger = Logger.getLogger(UserController.class.getName());
