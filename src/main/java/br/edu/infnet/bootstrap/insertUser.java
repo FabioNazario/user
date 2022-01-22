@@ -35,6 +35,21 @@ public class insertUser {
 		user.setPerfis(perfis);
 		
 		this.userRepository.save(user);
+		
+		user = new User();
+		
+		user.setUsername("user");
+		user.setPass(new BCryptPasswordEncoder().encode("user"));
+		
+		perfil = perfilRepository.findById(3L).get();
+		perfis = new HashSet<Perfil>();
+		perfis.add(perfil);
+		user.setPerfis(perfis);
+		
+		this.userRepository.save(user);
+		
+		
+		
 	
 	}
 	
