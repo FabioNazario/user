@@ -16,9 +16,9 @@ public class insertPerfil {
 	
 	@EventListener
 	public void appReady(ApplicationReadyEvent event) {
-		this.perfilRepository.save(Perfil.builder().name("root").build());
-		this.perfilRepository.save(Perfil.builder().name("adm").build());
-		this.perfilRepository.save(Perfil.builder().name("user").build());
+		this.perfilRepository.save(Perfil.builder().name("ROLE_ROOT").build());
+		this.perfilRepository.save(Perfil.builder().name("ROLE_ADMIN").build());
+		this.perfilRepository.save(Perfil.builder().name("ROLE_USER").build());
 	}
 	
 	
