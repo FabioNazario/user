@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.ws.rs.HeaderParam;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -21,11 +23,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.infnet.client.SegurancaClient;
 import br.edu.infnet.model.User;
+import br.edu.infnet.model.UserDTO;
 import br.edu.infnet.service.UserService;
 
 @RestController
@@ -36,6 +41,9 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	SegurancaClient segurancaClient;
 	
 	
 	@PostMapping
@@ -120,7 +128,21 @@ public class UserController {
 		
     }
 	
-
+//SEGURANCA ----------------------------------------------------------------------------------------
+	
+	@GetMapping("/whoami")
+	public ResponseEntity<UserDTO> whoami(@RequestHeader("Authorization") String token) {
+		
+		try {
+			UserDTO user = segurancaClient.getWhoami(token);
+			return new ResponseEntity<UserDTO>(user,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+	}
+	
+//UTIL ---------------------------------------------------------------------------------------------
 public static void copyNonNullProperties(Object src, Object target) {
     BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
 }
